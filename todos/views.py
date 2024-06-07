@@ -15,7 +15,7 @@ class TodoListRetrieveAPIView(generics.RetrieveAPIView): # 게시글 상세 조�
     serializer_class = TodoItemSerializer
     lookup_field = 'id'  # lookup_field를 'id'로 설정
 
-class TodoDestroyAPIView(generics.DestroyAPIView): # 게시글 삭제
+class TodoDestroyAPIView(generics.RetrieveDestroyAPIView): # 게시글 삭제
     queryset = TodoItem.objects.all()
     serializer_class = TodoItemSerializer
     lookup_field = 'id'
@@ -27,4 +27,4 @@ class TodoDestroyAPIView(generics.DestroyAPIView): # 게시글 삭제
         #삭제된 항목이 더 이상 조회되지 않도록 queryset을 업데이트
         self.queryset = self.filter_queryset(self.get_queryset())
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "삭제가 성공적으로 이루어졌습니다."}, status=status.HTTP_204_NO_CONTENT)
