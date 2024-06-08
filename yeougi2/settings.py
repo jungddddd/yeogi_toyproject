@@ -14,6 +14,9 @@ from pathlib import Path
 import environ
 import os
 
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
@@ -141,3 +144,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_REDIRECT_URL = reverse_lazy('accountapp:signup')

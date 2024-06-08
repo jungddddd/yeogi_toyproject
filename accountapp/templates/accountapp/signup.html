@@ -1,5 +1,14 @@
 <html>
 <body>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'accountapp:login' %}">
+                    <span>login</span>
+                </a>
+            {% else %}
+                <a href="{% url 'accountapp:logout' %}">
+                    <span>logout</span>
+                </a>
+            {% endif %}
 <form method="post">
     {{ error_msg }} <!--새로 고침할 때마다 이 msg가 지워졌으면 좋겠는데 그건 어떻게 하는건가요...?&ndash;&gt;-->
     {% csrf_token%}

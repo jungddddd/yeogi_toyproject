@@ -1,9 +1,10 @@
 from django.contrib import auth
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.hashers import make_password, check_password, verify_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from accountapp.forms import MemberForm
+from accountapp.forms import MemberForm, LoginForm
 from accountapp.models import Member
 
 res_data = {}
@@ -28,7 +29,37 @@ def signup(request):
             email1 = form.clean_email()
             form = Member(email=email1, password=make_password(password))
             form.save()
-            return redirect('/')
-
+            return redirect('/account/login')
     return render(request, 'accountapp/signup.html', res_data)
 
+
+def login_view(request):
+    is_ok=False
+    msg = None  # Initialize msg to None
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get("email")
+            raw_password = form.cleaned_data.get("password")
+            msg = "올바른 유저ID와 패스워드를 입력하세요."
+            try:
+                user = Member.objects.get(email=email)
+            except Member.DoesNotExist:
+                msg = "사용자가 존재하지 않습니다."
+            else:
+                if verify_password(raw_password, user.password):
+                    login(request, user=user)
+                    msg = "로그인 성공!!"
+                    is_ok=True
+                else:
+                    msg = "패스워드가 올바르지 않습니다."
+        else:
+            msg = "폼이 유효하지 않습니다. 입력된 데이터를 확인하세요."
+    else:
+        form = LoginForm()
+
+    return render(request, "accountapp/login.html", {"form": form, "msg": msg, "is_ok":is_ok})
+
+def logout_view(request):
+    logout(request)
+    return redirect('/account/login')

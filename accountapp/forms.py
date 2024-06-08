@@ -19,3 +19,10 @@ class MemberForm(forms.ModelForm):
         cleaned_data = super().clean()
         email = cleaned_data.get("email")
 
+class LoginForm(forms.Form):
+    email = forms.CharField(
+        max_length=64, required=True, widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Email"})
+    )
+    password = forms.CharField(
+        max_length=30, required=True, widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"})
+    )
