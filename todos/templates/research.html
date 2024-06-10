@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>main_research</title>
+  <style>
+    body{
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #F5F6F6;
+    }
+    #header {
+      background-color: #ffffff;
+    }
+    .headerText {
+      display: flex;
+      align-items: center;
+      margin: 20px 0px 20px 30px;
+    }
+    .headerText h2 {
+      margin: 0 10px;
+    }
+    #todo {
+      color : #A7A7B4;
+    }
+    #research {
+      color : #0C0A6A;
+    }
+    h1 {
+      color: #A7A7B4;
+      font-weight:200;
+      width: 500px;
+      text-align: center;
+    }
+    span {
+      font-size: 21px;
+      font-weight: bold;
+    }
+    .main {
+      width: 100%;
+      height: 100%;
+    }
+    .data {
+        margin: 50px 0px 50px 40px;
+    }
+    .site {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .site-info {
+        width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background-color: #FFFFFF;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
+        margin : 0px 20px 0px 0px;
+        padding-bottom: 20px; /* 앵커 태그에 아래 여백 추가 */
+    }
+    .site-info h3 {
+      margin-left : 20px;
+    }
+    .site-info p {
+      margin-left : 20px;
+      color: #8B8B9C;
+    }
+    .site-info a {
+      margin: 0px 0px 0px 20px; /* 여백 조정 */
+      color: #7881F3;
+    }
+  </style>
+</head>
+<body>
+    <div class="header">
+        <div class="headerText">
+            <h2 id="todo">To do</h2>
+            <h2 id="research">Research</h2>
+        </div>
+    </div>
+    <hr style="color:#8B8B9C; margin:0;">
+    <div class="main">
+        <div class="data" style="margin-top:0;">
+            <h2>논문·학술지 자료조사 사이트</h2>
+            <div class="site">
+                <div class="site-info">
+                    <h3>DBpia</h3>
+                    <p>논문, 학술저널 검색 플랫폼 서비스</p>
+                    <a href="https://www.dbpia.co.kr/">www.dbpia.co.kr</a>
+                </div>
+                <div class="site-info">
+                    <h3>국가정책연구포털(NKIS)</h3>
+                    <p>국가정책연구포털은 경제·인문사...</p>
+                    <a href="https://www.nkis.re.kr/main.do">www.nkis.re.kr</a>
+                </div>
+                <div class="site-info">
+                    <h3>국립중앙도서관</h3>
+                    <p>국립중앙도서관에 오신 것을 환...</p>
+                    <a href="https://www.nl.go.kr/">www.nl.go.kr</a>
+                </div>
+            </div>
+        </div>
+        <div class="data">
+            <h2>경영·경제·산업 자료조사 사이트</h2>
+            <div class="site">
+                <div class="site-info">
+                    <h3>포스코경영연구원</h3>
+                    <p>철강 지역철강 인 신재생에너지...</p>
+                    <a href="https://www.posri.re.kr/kor/index.do">www.posri.re.kr</a>
+                </div>
+                <div class="site-info">
+                    <h3>KDI 한국개발연구원</h3>
+                    <p>KAI는 한국경제 발전과 선진화의...</p>
+                    <a href="https://www.kdi.re.kr/">www.kdi.re.kr</a>
+                </div>
+                <div class="site-info">
+                    <h3>KOTRA 무역투자24</h3>
+                    <p>KOTRA 무역투자24 입니다.</p>
+                    <a href="https://www.kotra.or.kr/index.do">www.kotra.or.kr</a>
+                </div>
+            </div>
+        </div>
+        <div class="data">
+            <h2>통계자료 사이트</h2>
+            <div class="site">
+                <div class="site-info">
+                    <h3>KOSIS 국가통계포털</h3>
+                    <p>검색어 삭제 자동완성 열기 #인...</p>
+                    <a href="https://kosis.kr/index/index.do">kosis.kr</a>
+                </div>
+                <div class="site-info">
+                    <h3>한국갤럽조사연구소</h3>
+                    <p>Previous 한국 갤럽 데일리 오피...</p>
+                    <a href="https://www.gallup.co.kr/main.asp">www.gallup.co.kr</a>
+                </div>
+            </div>
+        </div>
+        <div>
+
+        </div>
+        <div>
+
+        </div>
+    </div>
+    <script>
+       document.getElementById('todo').addEventListener('mouseover', function() {
+            document.getElementById('todo').style.color = '#0C0A6A';
+            document.getElementById('research').style.color = '#A7A7B4';
+        });
+
+        document.getElementById('todo').addEventListener('mouseout', function() {
+            document.getElementById('todo').style.color = ''; // 원래 색상으로 돌아가게 하려면 빈 문자열로 설정
+            document.getElementById('research').style.color = ''; // 원래 색상으로 돌아가게 하려면 빈 문자열로 설정
+        });
+        document.getElementById('todo').addEventListener('click',function(){
+            window.location.href="todo.html";
+        })
+    </script>
+</body>
+</html>

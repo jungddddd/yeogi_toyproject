@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>main</title>
+  <style>
+    body{
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #F5F6F6;
+    }
+    #header {
+      background-color: #ffffff;
+    }
+    .headerText {
+      display: flex;
+      align-items: center;
+      padding: 20px 0px 0px 30px;
+    }
+    .headerText h2 {
+      margin: 0 10px;
+    }
+    #todo {
+      color : #0C0A6A;
+    }
+    #research {
+      color : #A7A7B4;
+    }
+
+    #logout {
+      padding: 10px;
+      margin: 0 10px;
+      position : fixed;
+      top:20px;
+      right: 30px;
+      border: none;
+      font-size: 15px;
+      border-radius: 5px;
+      color:#F5F6F6;
+      background-color: #7881F3;
+    }
+    #newBoard {
+      background-color: #DFDFFC;
+      border: none;
+      border-radius: 5px;
+      width: 150px;
+      margin: 10px 0px 20px 40px;
+      font-size : 15px;
+      padding: 5px;
+    }
+    h1 {
+      color: #A7A7B4;
+      font-weight:200;
+      width: 500px;
+      text-align: center;
+    }
+    span {
+      font-size: 21px;
+      font-weight: bold;
+    }
+    .main_before {
+      width: 100%;
+      height:100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .main_after {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .container {
+        width: 300px;
+        height: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background-color: #FFFFFF;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
+        margin : 30px 0px 0px 30px;
+        padding-bottom: 20px; 
+    }
+    .container h2 {
+        color: #131316;
+        text-align: center;
+        font-weight: 500;
+        margin: 20px 10px;
+        max-width: 280px;
+        overflow-wrap: break-word;
+        word-break: break-all; 
+        white-space: normal;
+    }
+  </style>
+</head>
+<body>
+    <div id="header">
+      <div class="headerText">
+        <h2 id="todo">To do</h2>
+        <h2 id="research">Research</h2>
+        <button id="logout">log out</button>
+      </div>
+      <br>
+      <button id="newBoard"><span>+</span> 새로운 보드 생성</button>
+    </div>
+    <hr style="color:#8B8B9C; margin:0">
+    <div class="main_after">
+    </div>
+    <div class="main_before">
+      <h1>새로운 보드를 생성하고<br>체계적으로 자료를 정리해보세요!</h1>
+    </div>
+    <script>
+      document.getElementById('research').addEventListener('mouseover', function() {
+            document.getElementById('research').style.color = '#0C0A6A';
+            document.getElementById('todo').style.color = '#A7A7B4';
+        });
+
+      document.getElementById('research').addEventListener('mouseout', function() {
+            document.getElementById('research').style.color = ''; // 원래 색상으로 돌아가게 하려면 빈 문자열로 설정
+            document.getElementById('todo').style.color = ''; // 원래 색상으로 돌아가게 하려면 빈 문자열로 설정
+        });
+
+      document.getElementById('research').addEventListener('click',function(){
+            window.location.href="research.html";
+        })
+      document.getElementById('newBoard').addEventListener('click',function(){
+              window.location.href="board.html";
+             // 입력된 내용 가져오기
+              var todoTitle = document.getElementById("title").value.trim();
+              // 입력된 내용이 비어있지 않은 경우에만 실행
+              if (todoText !== "") {
+                // 기존의 div 요소를 찾고 삭제합니다.
+                var existingDiv = document.querySelector(".main_before");
+                if (existingDiv) {
+                    existingDiv.remove();
+                }
+                // 새로운 div 요소를 생성합니다.
+                var newDiv = document.createElement("div");
+                newDiv.classList.add("container");
+
+                newDiv.innerHTML = `
+                    <div class="container">
+                      <h2>${todoTitle}</h2>
+                    </div>
+                `;
+
+            // 컨테이너에 새로운 div를 추가합니다.
+            document.querySelector("main_after").appendChild(newDiv);
+
+            }
+            window.location.href="board.html";
+        })
+
+        
+      
+    </script>
+</body>
+</html>
