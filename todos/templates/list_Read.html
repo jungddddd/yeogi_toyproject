@@ -36,7 +36,7 @@
 
     <script>
         // API 엔드포인트 URL
-        const apiUrl = 'todos/list';
+        const apiUrl = '/todos/list';
 
         // API 호출 및 데이터 처리 함수
         async function fetchTodos() {
@@ -51,7 +51,7 @@
 
         // HTML 생성 함수
         function readTodoItemHtml(todo) {
-            return <li>${todo.title}</li>;
+            return `<li>${todo.title}</li>`;
         }
 
         // Todo 리스트 렌더링 함수

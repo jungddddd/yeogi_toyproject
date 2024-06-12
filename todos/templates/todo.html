@@ -126,35 +126,108 @@
         });
 
       document.getElementById('research').addEventListener('click',function(){
-            window.location.href="research.html";
+            window.location.href="{% url 'research' %}";
         })
-      document.getElementById('newBoard').addEventListener('click',function(){
-              window.location.href="board.html";
-             // 입력된 내용 가져오기
-              var todoTitle = document.getElementById("title").value.trim();
-              // 입력된 내용이 비어있지 않은 경우에만 실행
-              if (todoText !== "") {
-                // 기존의 div 요소를 찾고 삭제합니다.
-                var existingDiv = document.querySelector(".main_before");
-                if (existingDiv) {
-                    existingDiv.remove();
+      // 보드를 불러와서 표시하는 함수
+      function loadBoards() {
+        fetch("{% url 'todo-list-retrieve' %}")
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('새 board 항목 생성에 실패했습니다.');
                 }
-                // 새로운 div 요소를 생성합니다.
-                var newDiv = document.createElement("div");
-                newDiv.classList.add("container");
+            })
+            .then(data => {
+                const mainDiv = document.querySelector('.main_after');
+                mainDiv.innerHTML = ''; // 기존 내용 비우기
 
-                newDiv.innerHTML = `
-                    <div class="container">
-                      <h2>${todoTitle}</h2>
-                    </div>
-                `;
+                if (data.length === 0) {
+                    const emptyElement = document.createElement('div');
+                    emptyElement.classList.add("container");
+                    emptyElement.innerHTML = `
+                        <div class="container">
+                            <h2>new Board</h2>
+                        </div>
+                    `;
+                    mainDiv.appendChild(emptyElement);
 
-            // 컨테이너에 새로운 div를 추가합니다.
-            document.querySelector("main_after").appendChild(newDiv);
+                    var existingDiv = document.querySelector(".main_before");
+                    if (existingDiv) {
+                        existingDiv.remove();
+                    }
+                } else {
+                    data.forEach(get => {
+                        const getElement = document.createElement('div');
+                        getElement.classList.add("container");
+                        getElement.innerHTML = `
+                            <div class="container" data-id="${todo.id}">
+                                <h2>${get.title}</h2>
+                            </div>
+                        `;
+                        mainDiv.appendChild(getElement);
 
-            }
-            window.location.href="board.html";
-        })
+                        var existingDiv = document.querySelector(".main_before");
+                        if (existingDiv) {
+                            existingDiv.remove();
+                        }
+
+                        document.querySelectorAll('.container').forEach(container => {
+                            container.addEventListener('click', function() {
+                                var todoId = this.getAttribute('data-id');
+                                window.location.href = `board.html?boardId=${boardId}`;
+                            });
+                        });
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('API 호출에 문제가 발생했습니다.', error);
+                alert("새 board 항목 생성에 실패했습니다.");
+            });
+    }
+
+    // 페이지 로드될 때 보드를 로드하여 표시
+    window.onload = function() {
+        loadBoards();
+    };
+
+    document.getElementById('newBoard').addEventListener('click',function(){
+      fetch('todos/create', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            id : 1,
+            title: "제목",
+            content: "내용",
+            priority: 1,
+            image: "C:\Users\Minseohyun\Desktop\toyProject_FE\yeogi_toyproject\media\todos\010.png",
+            completed: false,
+            created_at:"2024-06-04T17:52:41.109938Z",
+            original_url: "https://www.kdi.re.kr/",
+            related_site_url: "https://www.kdi.re.kr/",
+            due_date:"2024-06-04T17:52:41.109938Z",
+            user: "user" 
+          })
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('새 board 항목 생성에 실패했습니다.');
+          }
+          // 새 보드가 생성되면 UI를 업데이트합니다.
+          loadBoards();
+          alert("Todo 항목이 성공적으로 생성되었습니다.");
+          window.location.href = `board.html?boardId=${boardId}`; // 생성 후에는 board.html로 이동
+      })
+      .catch(error => {
+          console.error('API 호출에 문제가 발생했습니다.', error);
+          alert("새 board 항목 생성에 실패했습니다.");
+      });
+  });
+          
+         
 
         
       

@@ -5,7 +5,21 @@ from rest_framework.response import Response
 from rest_framework import generics
 from .models import TodoItem
 from .serializer import TodoItemSerializer
-class TodoCreateAPIView(generics.CreateAPIView): # 게시글 생성
+from django.shortcuts import render
+
+def BoardView(request):
+    return render(request, 'board.html')
+
+def TodoView(request):
+    return render(request, 'todo.html')
+
+def ResearchView(request):
+    return render(request, 'research.html') 
+
+def ReadView(request):
+    return render(request, 'list_Read.html') 
+
+class TodoCreateAPIView(generics.CreateAPIView):
     queryset = TodoItem.objects.all()
     serializer_class = TodoItemSerializer
 
