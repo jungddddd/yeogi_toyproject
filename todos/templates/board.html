@@ -275,6 +275,9 @@
           editablePlaceholder.style.display = "none";
           }
       });
+      document.querySelector(".close").addEventListener("click", function()  {
+        window.location.href = "todo.html";
+      })
        // URL 매개변수에서 ID 가져오기
         const urlParams = new URLSearchParams(window.location.search);
         const boardId = urlParams.get('boardId');
@@ -282,7 +285,7 @@
         // URL 매개변수에 따라 데이터 불러오기
         if (boardId) {
             // URL 매개변수가 있으면 해당 ID를 사용하여 데이터를 불러옴
-            fetch(`/boards/${boardId}`)
+            fetch(`/todos/list/${boardId}/`)
                 .then(response => {
                     if (response.ok) {
                         return response.json();
@@ -292,6 +295,11 @@
                 })
                 .then(data => {
                     // 데이터를 사용하여 보드를 구성하는 코드 작성
+                    const titleInput = document.getElementById('title');
+                    const missionInput = document.getElementById('mission');
+                    // 서버에서 받아온 데이터로 입력 필드 값을 설정합니다.
+                    titleInput.value = data.title;
+                    missionInput.value = data.content;
                     console.log(data);
                 })
                 .catch(error => {
@@ -303,6 +311,90 @@
             // 여기에 다른 방법으로 ID를 가져오는 코드 작성
         }
 
+        document.addEventListener('DOMContentLoaded', () => {
+            const titleInput = document.getElementById('title');
+            const missionInput = document.getElementById('mission');
+            let timeoutId = null;
+
+            function autoSave() {
+                const title = titleInput.value.trim();
+                const mission = missionInput.value.trim();
+
+                // Check if title or mission is empty
+                if (!title || !mission) {
+                    return;
+                }
+
+                // Extract board ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const boardId = urlParams.get('boardId');
+
+                const data = {
+                    title: title,
+                    content: mission,
+                    user : "1"
+                };
+
+                // Send update request to server
+                fetch(`/todos/update/${boardId}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Board updated successfully');
+                    } else {
+                        throw new Error('Failed to update board');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            // 삭제 버튼 클릭 시 동작할 함수
+            document.getElementById('deleteBoard').addEventListener('click', function() {
+            if (confirm('정말 이 보드를 삭제하시겠습니까?')) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const boardId = urlParams.get('boardId');
+
+                // 서버에 DELETE 요청 보내기
+                fetch(`/todos/delete/${boardId}/`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Board deleted successfully');
+                        // 삭제 성공 시, 이동할 페이지로 리다이렉트 예시
+                        window.location.href = '{% url 'todo-html' %}'; // 삭제 후 이동할 페이지 주소
+                    } else {
+                        throw new Error('Failed to delete board');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+            // Listen for input events on title and mission inputs
+            titleInput.addEventListener('input', function() {
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+                timeoutId = setTimeout(autoSave, 1000); // Auto-save after 1 second of inactivity
+            });
+
+            missionInput.addEventListener('input', function() {
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+                timeoutId = setTimeout(autoSave, 1000); // Auto-save after 1 second of inactivity
+            });
+        });
+
       /*document.querySelector(".close").addEventListener("click", function() {
         // 입력된 제목과 임무를 가져오기
         var title = document.getElementById("title").value.trim();
@@ -311,11 +403,11 @@
         // 각 todo 항목들을 가져와서 배열에 추가하기
         var todos = [];
         var todoContainers = document.querySelectorAll(".toggle-container");
-       // todoContainers.forEach(function(container) {
-            //var todoText = container.querySelector("label").innerText.trim();
-           // var todoContent = container.querySelector(".editable").innerText.trim();
-            //todos.push({todoText, todoContent});
-        //});
+        todoContainers.forEach(function(container) {
+            var todoText = container.querySelector("label").innerText.trim();
+            var todoContent = container.querySelector(".editable").innerText.trim();
+            todos.push({todoText, todoContent});
+        });
 
         // AJAX 요청을 보내기
         fetch('/todos/create/', {
@@ -325,17 +417,9 @@
             },
             body: JSON.stringify({
                 title: title,
-                //content: mission,
-                //todos: todos
-                priority: null, // 우선순위
-            image: null, // 이미지 (추후 추가)
-            completed: false, // 완료 여부
-            created_at: null, // 생성일
-            original_url: "", // 원본 URL
-            related_site_url: "", // 관련 사이트 URL
-            due_date: null, // 마감일
-            user: null // 사용자
-            })
+                content: mission,
+                todos: todos
+                
         })
         .then(response => {
             if (response.ok) {
