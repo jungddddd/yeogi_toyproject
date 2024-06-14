@@ -1,6 +1,6 @@
 # 🍱 자료조사 가이드 Callearerar checker 🍱
 
-<img width="1920" alt="1" src=/Users/yumjung/Desktop/스크린샷 2024-06-14 오후 10.42.08.png>
+<img width="1920" alt="1" src="C:\Users\qtrac\Downloads\2024-06-14_10.42.08.png">
 
 <br><br>
 
