@@ -1,6 +1,6 @@
 # 🍱 자료조사 가이드 Callearerar checker 🍱
 
-<img width="1920" alt="1" src="C:\Users\qtrac\Downloads\2024-06-14_10.42.08.png">
+<img width="653" alt="2024-06-14_10 42 08" src="https://github.com/jungddddd/yeogi_toyproject/assets/157080447/f9cd4e59-1aab-4db9-a36d-c0e375c721de">
 
 <br><br>
 
