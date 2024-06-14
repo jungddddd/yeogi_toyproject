@@ -19,9 +19,15 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from accountapp.views import signup, login_view, logout_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('account/', include('accountapp.urls')),
     path('', include('todos.urls')),
     path('api/', include('todos.urls')),
+    path('signup/', signup, name='signup'),
+    path('login/', login_view, name="login"),
+    path('logout/', logout_view, name="logout"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

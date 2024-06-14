@@ -1,6 +1,6 @@
 from django.contrib import auth
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.hashers import make_password, check_password, verify_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -47,7 +47,7 @@ def login_view(request):
             except Member.DoesNotExist:
                 msg = "사용자가 존재하지 않습니다."
             else:
-                if verify_password(raw_password, user.password):
+                if check_password(raw_password, user.password):
                     login(request, user=user)
                     msg = "로그인 성공!!"
                     is_ok=True
