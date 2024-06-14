@@ -34,7 +34,7 @@
     #logout {
       padding: 10px;
       margin: 0 10px;
-      position : fixed;
+      position : absolute;
       top:20px;
       right: 30px;
       border: none;
@@ -74,28 +74,54 @@
       flex-wrap: wrap;
     }
     .container {
-        width: 300px;
-        height: 120px;
+        width: 470px;
+        height: 150px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         background-color: #FFFFFF;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
-        margin : 30px 0px 0px 30px;
-        padding-bottom: 20px; 
+        margin : 50px 0px 0px 70px;
+        padding-bottom: 20px;
     }
     .todoTitle {
         color: #131316;
-        text-align: center;
-        font-weight: 500;
+        text-align: left;
+        font-size: 30px;
+        font-weight: normal;
+        padding-left: 20px;
+        padding-right: 20px;
         margin: 20px 10px;
-        max-width: 280px;
+        max-width: 460px;
         overflow-wrap: break-word;
-        word-break: break-all; 
+        word-break: break-all;
         white-space: normal;
     }
+
+      .checkbox {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            width: 5%;
+            height: 25px;
+            background-color: #F5F6F6;
+            border: none;
+            border-radius: 6px;
+            padding: 20px;
+        }
+        #checkbox {
+            align-items: center;
+            padding : 20px;
+            border: none;
+            border-radius: 6px;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #A7A7B4;
+            accent-color: #2724EA;
+      }
+
   </style>
 </head>
 <body>
@@ -103,7 +129,7 @@
       <div class="headerText">
         <h2 id="todo">To do</h2>
         <h2 id="research">Research</h2>
-        <button id="logout">log out</button>
+        <button id="logout">Log out</button>
       </div>
       <br>
       <button id="newBoard"><span>+</span> 새로운 보드 생성</button>
@@ -141,17 +167,16 @@
             .then(data => {
               const mainDiv = document.querySelector('.main_after');
               mainDiv.innerHTML = ''; // 기존 내용 비우기
-          
+
               if (data.length === 0) {
                   const emptyElement = document.createElement('div');
                   emptyElement.classList.add("container");
                   emptyElement.innerHTML = `
-                      <div>
-                          <h2 class="todoTitle">new Board</h2>
-                      </div>
+                      <h2 class="todoTitle">New Board</h2>
+                      <input type="checkbox" id="checkbox" ${get.completed ? 'checked' : ''} disabled>
                   `;
                   mainDiv.appendChild(emptyElement);
-          
+
                   var existingDiv = document.querySelector(".main_before");
                   if (existingDiv) {
                       existingDiv.remove();
@@ -161,19 +186,18 @@
                       console.log('Processing item:', get);
                       const getElement = document.createElement('div');
                       getElement.classList.add("container");
-                      getElement.dataset.id = get.id; 
+                      getElement.dataset.id = get.id;
                       getElement.innerHTML = `
-                          <div>
-                              <h2 class="todoTitle">${get.title ? get.title : 'new Board'}</h2>
-                          </div>
+                          <h2 class="todoTitle">${get.title ? get.title : 'New Board'}</h2>
+                          <input type="checkbox" id="checkbox" ${get.completed ? 'checked' : ''} disabled>
                       `;
                       mainDiv.appendChild(getElement);
-          
+
                       var existingDiv = document.querySelector(".main_before");
                       if (existingDiv) {
                           existingDiv.remove();
                       }
-          
+
                       getElement.addEventListener('click', (event) => {
                           const boardId = getElement.dataset.id;
                           console.log('Container clicked, boardId:', boardId);  // 클릭한 container의 boardId 출력
@@ -210,7 +234,7 @@
               console.error('Error details:', errorData); // 여기서 오류 세부 정보를 출력
               throw new Error('새 board 항목 생성에 실패했습니다.');})
           }
-          return response.json(); 
+          return response.json();
       })
       .then(data => {
         console.log('Response data:', data); // 서버로부터의 응답 데이터 확인
@@ -228,13 +252,12 @@
           alert("새 board 항목 생성에 실패했습니다.");
       });
   });
-          
+
     document.getElementById('logout').addEventListener('click',function()  {
 
     })
 
-        
-      
+
     </script>
 </body>
 </html>
