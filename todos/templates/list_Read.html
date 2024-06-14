@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        /* 간단한 스타일링 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <ul id="todo-list">
+        <!-- Todo 아이템이 여기에 동적으로 추가될 것입니다. -->
+    </ul>
+
+    <script>
+        // API 엔드포인트 URL
+        const apiUrl = '/todos/list';
+
+        // API 호출 및 데이터 처리 함수
+        async function fetchTodos() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching todos:', error);
+            }
+        }
+
+        // HTML 생성 함수
+        function readTodoItemHtml(todo) {
+            return `<li>${todo.title}</li>`;
+        }
+
+        // Todo 리스트 렌더링 함수
+        async function renderTodoList() {
+            const todoListElement = document.getElementById('todo-list');
+            const todos = await fetchTodos();
+
+            todos.forEach(todo => {
+                const todoItemHtml = readTodoItemHtml(todo);
+                todoListElement.insertAdjacentHTML('beforeend', todoItemHtml);
+            });
+        }
+
+        // 페이지 로드 시 Todo 리스트 렌더링
+        renderTodoList();
+    </script>
+</body>
+</html>

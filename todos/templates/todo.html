@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>main</title>
+  <style>
+    body{
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #F5F6F6;
+    }
+    #header {
+      background-color: #ffffff;
+    }
+    .headerText {
+      display: flex;
+      align-items: center;
+      padding: 20px 0px 0px 30px;
+    }
+    .headerText h2 {
+      margin: 0 10px;
+    }
+    #todo {
+      font-size: 30px;
+      color : #0C0A6A;
+    }
+    #research {
+      font-size: 30px;
+      color : #A7A7B4;
+    }
+
+    #logout {
+      width: 140px;
+      padding: 8px;
+      margin: 0 10px;
+      position : absolute;
+      top:25px;
+      right: 30px;
+      border: none;
+      font-size: 17px;
+      font-weight: 300;
+      border-radius: 5px;
+      color:#F5F6F6;
+      background-color: #8B8B9C;
+    }
+    #newBoard {
+      background-color: #DFDFFC;
+      border: none;
+      border-radius: 5px;
+      width: 150px;
+      margin: 10px 0px 20px 40px;
+      font-size : 15px;
+      padding: 5px;
+    }
+    h1 {
+      color: #A7A7B4;
+      font-weight:200;
+      width: 500px;
+      text-align: center;
+    }
+    span {
+      font-size: 21px;
+      font-weight: bold;
+    }
+    .main_before {
+      width: 100%;
+      height:100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .main_after {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .container {
+        position:relative;
+        width: 470px;
+        height: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background-color: #FFFFFF;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
+        margin : 50px 0px 0px 70px;
+        padding-bottom: 20px;
+    }
+    .todoTitle {
+        color: #131316;
+        text-align: left;
+        font-size: 30px;
+        font-weight: normal;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin: 20px 10px;
+        max-width: 460px;
+        overflow-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+    }
+    .projectName {
+        align-items: center;
+        width: 300px;
+        overflow:hidden;
+        font-weight: 400;
+        font-size: 16px;
+        position: absolute;
+        bottom: 10px;
+        left: 20px;
+        padding-left: 10px;
+        color: #727281;
+    }
+    #checkbox{
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        padding: 0px;
+        border: none;
+        border-radius: 10px;
+        margin: 8px;
+        width: 24px;
+        height: 24px;
+        border: 1px solid #A7A7B4;
+        accent-color: #2724EA;
+    }
+
+  </style>
+</head>
+<body>
+    <div id="header">
+      <div class="headerText">
+        <h2 id="todo">To do</h2>
+        <h2 id="research">Research</h2>
+        <button id="logout">Log out</button>
+      </div>
+      <br>
+      <button id="newBoard"><span>+</span> 새로운 보드 생성</button>
+    </div>
+    <hr style="color:#8B8B9C; margin:0">
+    <div class="main_after">
+    </div>
+    <div class="main_before">
+      <h1>새로운 보드를 생성하고<br>체계적으로 자료를 정리해보세요!</h1>
+    </div>
+    <script>
+      document.getElementById('research').addEventListener('mouseover', function() {
+            document.getElementById('research').style.color = '#0C0A6A';
+            document.getElementById('todo').style.color = '#A7A7B4';
+        });
+
+      document.getElementById('research').addEventListener('mouseout', function() {
+            document.getElementById('research').style.color = ''; // 원래 색상으로 돌아가게 하려면 빈 문자열로 설정
+            document.getElementById('todo').style.color = ''; // 원래 색상으로 돌아가게 하려면 빈 문자열로 설정
+        });
+
+      document.getElementById('research').addEventListener('click',function(){
+            window.location.href="{% url 'research' %}";
+        })
+      // 보드를 불러와서 표시하는 함수
+      function loadBoards() {
+        fetch("{% url 'todo-list-retrieve' %}")
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('새 board 항목 생성에 실패했습니다.');
+                }
+            })
+            .then(data => {
+              const mainDiv = document.querySelector('.main_after');
+              mainDiv.innerHTML = ''; // 기존 내용 비우기
+
+              if (data.length === 0) {
+                  const emptyElement = document.createElement('div');
+                  emptyElement.classList.add("container");
+                  emptyElement.innerHTML = `
+                      <h2 class="todoTitle">New Board</h2>
+                      <h5 class="projectName">${get.project ? get.project : '프로젝트명'}</h5>
+                      <input type="checkbox" id="checkbox" ${get.completed ? 'checked' : ''} disabled">
+                  `;
+                  mainDiv.appendChild(emptyElement);
+
+                  var existingDiv = document.querySelector(".main_before");
+                  if (existingDiv) {
+                      existingDiv.remove();
+                  }
+              } else {
+                  data.forEach(get => {
+                      console.log('Processing item:', get);
+                      const getElement = document.createElement('div');
+                      getElement.classList.add("container");
+                      getElement.dataset.id = get.id;
+                      getElement.innerHTML = `
+                          <h2 class="todoTitle">${get.title ? get.title : 'New Board'}</h2>
+                          <h4 class="projectName">${get.project ? get.project : '프로젝트명'}</h4>
+                          <input type="checkbox" id="checkbox" ${get.completed ? 'checked' : ''} disabled">
+                      `;
+                      mainDiv.appendChild(getElement);
+
+                      var existingDiv = document.querySelector(".main_before");
+                      if (existingDiv) {
+                          existingDiv.remove();
+                      }
+
+                      getElement.addEventListener('click', (event) => {
+                          const boardId = getElement.dataset.id;
+                          console.log('Container clicked, boardId:', boardId);  // 클릭한 container의 boardId 출력
+                          window.location.href = `board.html?boardId=${boardId}`;
+                      });
+                  });
+              }
+          })
+            .catch(error => {
+                console.error('API 호출에 문제가 발생했습니다.', error);
+                alert("새 board 항목 생성에 실패했습니다.");
+            });
+    }
+
+    // 페이지 로드될 때 보드를 로드하여 표시
+    window.onload = function() {
+        loadBoards();
+    };
+
+    document.getElementById('newBoard').addEventListener('click',function(){
+      const formData = new FormData();
+
+      // 필수 필드 추가
+      formData.append('title', '');  // 빈 값으로 보낼 경우
+      formData.append('user', "1");  // 빈 값으로 보낼 경우
+
+      fetch('/todos/create/', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => {
+          if (!response.ok) {
+            return response.json().then(errorData => {
+              console.error('Error details:', errorData); // 여기서 오류 세부 정보를 출력
+              throw new Error('새 board 항목 생성에 실패했습니다.');})
+          }
+          return response.json();
+      })
+      .then(data => {
+        console.log('Response data:', data); // 서버로부터의 응답 데이터 확인
+        if (!data.id) {
+          throw new Error('서버 응답에 보드 ID가 없습니다.');
+        }
+        // 새 보드가 생성되면 UI를 업데이트합니다.
+        const boardId = data.id;  // 새로 생성된 보드 ID
+        alert("Todo 항목이 성공적으로 생성되었습니다.");
+        window.location.href = `board.html?boardId=${boardId}`; // 생성 후에는 board.html로 이동
+        loadBoards();
+      })
+      .catch(error => {
+          console.error('API 호출에 문제가 발생했습니다.', error);
+          alert("새 board 항목 생성에 실패했습니다.");
+      });
+  });
+
+    document.getElementById('logout').addEventListener('click',function()  {
+
+    })
+
+
+    </script>
+</body>
+</html>
