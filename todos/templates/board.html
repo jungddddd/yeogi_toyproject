@@ -148,12 +148,12 @@
                     // 데이터를 사용하여 보드를 구성하는 코드 작성
                     const titleInput = document.getElementById('title');
                     const missionInput = document.getElementById('mission');
-                    const contentsInput = document.getElementById('editable');
+                    const detailsInput = document.getElementById('editable');
                     const checkbox = document.getElementById('checkbox')
                     // 서버에서 받아온 데이터로 입력 필드 값을 설정합니다.
                     titleInput.value = data.title;
                     missionInput.value = data.content;
-                    contentsInput.textContent = data.todo;
+                    detailsInput.textContent = data.detail;
                     checkbox.checked = data.completed;
                     console.log(data);
                 })
@@ -194,17 +194,22 @@
             editable.style.fontWeight = '500';
             editable.classList.add('placeholder');
         } else {
+            editable.style.color = '#000';
             editable.classList.remove('placeholder');
         }
     }
 
     const titleInput = document.getElementById('title');
     const missionInput = document.getElementById('mission');
+    const detailsInput = document.getElementById('editable');
+    const checkbox = document.getElementById('checkbox');
     let timeoutId = null;
 
     function autoSave() {
         const title = titleInput.value.trim();
         const mission = missionInput.value.trim();
+        const detail = detailsInput.textContent;
+        const check = checkbox.checked;
 
         // Check if title or mission is empty
         if (!title || !mission) {
@@ -218,6 +223,8 @@
         const data = {
             title: title,
             content: mission,
+            detail: detail,
+            completed: check,
             user : "1" // 임시 사용자 ID
         };
 
@@ -232,6 +239,7 @@
         .then(response => {
             if (response.ok) {
                 console.log('Board updated successfully');
+                console.log(data);
             } else {
                 throw new Error('Failed to update board');
             }
@@ -280,6 +288,23 @@
         }
         timeoutId = setTimeout(autoSave, 1000); // Auto-save after 1 second of inactivity
     });
+
+     // 상세 내용 입력 필드의 입력 이벤트 리스너 추가
+     detailsInput.addEventListener('input', function() {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(autoSave, 1000); // 1초의 비활성 시간 후 자동 저장
+      });
+
+      // 체크박스의 변경 이벤트 리스너 추가
+      checkbox.addEventListener('change', function() {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(autoSave, 1000); // 1초의 비활성 시간 후 자동 저장
+      });
+    
 });
 
 
