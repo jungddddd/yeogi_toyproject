@@ -138,7 +138,10 @@
       <div class="headerText">
         <h2 id="todo">To do</h2>
         <h2 id="research">Research</h2>
-        <button id="logout">Log out</button>
+          <form method="post" action="{% url 'accountapp:logout' %}">
+          {% csrf_token %}
+          <button id="logout" type="submit">Log out</button>
+        </form>
       </div>
       <br>
       <button id="newBoard"><span>+</span> 새로운 보드 생성</button>

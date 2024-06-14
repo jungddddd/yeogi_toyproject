@@ -33,8 +33,9 @@ def signup(request):
     return render(request, 'accountapp/signup.html', res_data)
 
 
+
 def login_view(request):
-    is_ok=False
+    is_ok = False
     msg = None  # Initialize msg to None
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -50,7 +51,9 @@ def login_view(request):
                 if check_password(raw_password, user.password):
                     login(request, user=user)
                     msg = "로그인 성공!!"
-                    is_ok=True
+                    is_ok = True
+                    # 로그인 성공 시 /todo/todo.html로 리다이렉트
+                    return redirect('/todo/todo.html')  # /todos/todo.html이 아니라 /todo/todo.html로 수정
                 else:
                     msg = "패스워드가 올바르지 않습니다."
         else:
@@ -58,7 +61,11 @@ def login_view(request):
     else:
         form = LoginForm()
 
-    return render(request, "accountapp/login.html", {"form": form, "msg": msg, "is_ok":is_ok})
+    return render(request, "accountapp/login.html", {"form": form, "msg": msg, "is_ok": is_ok})
+
+
+
+
 
 def logout_view(request):
     logout(request)
