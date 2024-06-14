@@ -12,6 +12,7 @@ class TodoItem(models.Model):
     title = models.CharField(max_length=100, null=True)
     content = models.TextField(blank=True, null=False)
     detail = models.TextField(blank=True, null=False)
+    project = models.TextField(blank=True, null=False)
     priority = models.IntegerField(default=1)  # 1: 낮음, 2: 중간, 3: 높음
     #image = models.ImageField(upload_to='todos/', null=False)
     completed = models.BooleanField(default=False)
